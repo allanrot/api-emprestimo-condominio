@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const itemsRoutes = require('./routes/items');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 
@@ -23,6 +24,7 @@ mongoose.connect(process.env.MONGO_URI)
     });
 
 app.use('/items', itemsRoutes);
+app.use('/auth', authRoutes);
 
 app.get('/', (req, res) => {
     res.send('API running');
