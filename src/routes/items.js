@@ -4,22 +4,23 @@ const router = express.Router();
 const Item = require('../models/item');
 const auth = require('../middlewares/auth');
 
-router.get('/', auth, async (req, res) => {
+router.get('/', async (req, res) => {
     const items = await Item.find();
 
     res.json(items);
 });
 
 router.post('/', auth, async (req, res) => {
-    const novoItem = new Item({
-        nome: req.body.nome,
-        descricao: req.body.descricao,
-        usuarioId: req.usuarioId
+    const newItem = new Item({
+        name: req.body.name,
+        description: req.body.description,
+        rentPricing: req.body.rentPricing,
+        userId: req.userId
     });
 
-    await novoItem.save();
+    await newItem.save();
 
-    res.status(201).json(novoItem);
+    res.status(201).json(newItem);
 });
 
 module.exports = router;
