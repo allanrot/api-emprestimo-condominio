@@ -1,25 +1,24 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const Usuario = require('../models/usuario');
+const User = require('../models/user');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
-router.post('/registrar', async (req, res) => {
-
-    const senhaHash = await bcrypt.hash(
-        req.body.senha,
+router.post('/register', async (req, res) => {
+    const passwordHash = await bcrypt.hash(
+        req.body.password,
         10
     );
 
-    const usuario = new Usuario({
-        nome: req.body.nome,
-        apartamento: req.body.apartamento,
-        telefone: req.body.telefone,
+    const user = new User({
+        name: req.body.name,
+        apartment: req.body.apartment,
+        phone: req.body.phone,
         email: req.body.email,
-        senha: senhaHash
+        password: passwordHash
     });
 
-    await usuario.save();
+    await user.save();
 
     res.status(201).json({
         mensagem: 'Usuário criado'
@@ -28,22 +27,22 @@ router.post('/registrar', async (req, res) => {
 
 
 router.post('/login', async (req, res) => {
-    const usuario = await Usuario.findOne({
+    const user = await user.findOne({
         email: req.body.email
     });
 
-    if (!usuario) {
+    if (!user) {
         return res.status(401).json({
             mensagem: 'Usuário não encontrado'
         });
     }
 
-    const senhaValida = await bcrypt.compare(
-        req.body.senha,
-        usuario.senha
+    const validPassword = await bcrypt.compare(
+        req.body.password,
+        user.password
     );
 
-    if (!senhaValida) {
+    if (!validPassword) {
         return res.status(401).json({
             mensagem: 'Senha inválida'
         });
@@ -51,7 +50,7 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign(
         {
-            usuarioId: usuario._id
+            userId: user._id
         },
         process.env.JWT_SECRET,
         {
@@ -61,8 +60,8 @@ router.post('/login', async (req, res) => {
 
     res.json({
         token,
-        usuarioId: usuario._id,
-        nome: usuario.nome
+        userId: user._id,
+        name: user.name
     });
 });
 

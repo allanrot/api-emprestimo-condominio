@@ -1,19 +1,25 @@
 const mongoose = require('mongoose');
 
 const itemSchema = new mongoose.Schema({
-    nome: {
+    name: {
         type: String,
         required: true
     },
-
-    descricao: {
+    description: {
         type: String,
-        required: true
+        required: false
     },
-
-    disponivel: {
+    available: {
         type: Boolean,
         default: true
+    },
+    rentPricing: {
+        type: Number,
+        required: false
+    },
+    userId: {
+        type: Number,
+        required: true
     }
 });
 

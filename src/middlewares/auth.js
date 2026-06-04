@@ -18,7 +18,7 @@ module.exports = (req, res, next) => {
             process.env.JWT_SECRET
         );
 
-        req.usuarioId = decoded.usuarioId;
+        req.userId = decoded.userId;
 
         next();
 
