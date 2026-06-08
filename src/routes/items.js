@@ -10,6 +10,12 @@ router.get('/', async (req, res) => {
     res.json(items);
 });
 
+router.get('/me', async (req, res) => {
+    const items = await Item.find({ userId: req.userId });
+
+    res.json(items);
+});
+
 router.post('/', auth, async (req, res) => {
     const newItem = new Item({
         name: req.body.name,
