@@ -1,17 +1,16 @@
 const express = require('express');
 const router = express.Router();
-
 const Item = require('../models/item-model');
 const auth = require('../middlewares/auth');
 
 router.get('/', async (req, res) => {
-    const items = await Item.find();
+    const items = await Item.find({ available: true }).sort({ createdAt: -1 });
 
     res.json(items);
 });
 
 router.get('/me', auth, async (req, res) => {
-    const items = await Item.find({ userId: req.userId });
+    const items = await Item.find({ userId: req.userId }).sort({ available: -1 });
 
     res.json(items);
 });
