@@ -67,15 +67,21 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/:id', auth, async (req, res) => {
-    const user = await User.findOne({
-        userId: req.params.id
-    });
+    try {
+        const user = await User.findById(req.params.id);
 
-    res.json({
-        name: user.name,
-        apartment: user.apartment,
-        phone: user.phone
-    });
+        if (!user) {
+            return res.status(404).json({ mensagem: 'Usuário não encontrado' });
+        }
+
+        res.json({
+            name: user.name,
+            apartment: user.apartment,
+            phone: user.phone
+        });
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Erro interno no servidor', erro: error.message });
+    }
 });
 
 module.exports = router;
