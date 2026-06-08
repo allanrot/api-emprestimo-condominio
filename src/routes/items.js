@@ -56,7 +56,7 @@ router.put('/:id', auth, async (req, res) => {
 router.patch('/:id/change-status', auth, async (req, res) => {
     const alteredItem = await Item.findOneAndUpdate(
         { _id: req.params.id, userId: req.userId },
-        { available: req.available },
+        { available: req.body.available },
         { new: true }
     );
 
