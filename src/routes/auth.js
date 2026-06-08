@@ -65,9 +65,9 @@ router.post('/login', async (req, res) => {
     });
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', auth, async (req, res) => {
     const user = await User.findOne({
-        userId: req.body.userId
+        userId: req.params.id
     });
 
     res.json({
