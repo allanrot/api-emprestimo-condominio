@@ -4,6 +4,7 @@ const User = require('../models/user-model');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const auth = require('../middlewares/auth');
+const mongoose = require('mongoose');
 
 router.post('/register', async (req, res) => {
     const passwordHash = await bcrypt.hash(
@@ -68,6 +69,10 @@ router.post('/login', async (req, res) => {
 
 router.get('/:id', auth, async (req, res) => {
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({ mensagem: 'ID com formato inválido' });
+        }
+
         const user = await User.findById(req.params.id);
 
         if (!user) {
